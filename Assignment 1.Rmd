@@ -1,0 +1,15 @@
+---
+title: "Assignment 1"
+author: "Rachel Dolson"
+date: "2025-01-07"
+output: html_document
+---
+
+# R Script 1
+
+# R Script 2
+
+```{r}
+
+```
+
