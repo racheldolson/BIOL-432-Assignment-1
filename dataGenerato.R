@@ -1,6 +1,8 @@
-#Vector with a set of 100 species names, randomly selected from a vector of 5 species names of your choosing
+#A vector of 5 species names of your choosing
 
 SpeciesName<-c("Turdus migratorius", "Pipilo erythrophthalmus", "Cyanocitta cristata", "Cyanocitta stelleri", "Zenaida macroura")
+
+#Creating a vector with a set of 100 species names, randomly selected
 
 Organism<-sample(SpeciesName, size=100 , replace=TRUE)
 
