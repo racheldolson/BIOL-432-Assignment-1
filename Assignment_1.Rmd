@@ -1,0 +1,111 @@
+---
+title: "Assignment 1"
+author: "Rachel Dolson"
+date: "2025-01-07"
+output: html_document
+---
+
+[GitHub repository](https://github.com/racheldolson/BIOL-432-Assignment-1/tree/main)
+
+https://github.com/racheldolson/BIOL-432-Assignment-1/tree/main
+
+## Loading the necessary libraries
+
+```{r}
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+```
+
+## Loading R Scripts
+
+```{r}
+source("dataGenerato.R")
+```
+This R Script generates the data frame which contains the limb length and width of 5 species of birds. There are 100 samples in this script, the 100 samples are randomly chosen from the five specified bird species. The limb measurements, length and width are randomly selected with a uniform distribution. There are three observers, these observers are randomly selected to observe the 100 species.
+
+```{r}
+source("volumeEstimato.R")
+```
+This R script adds a column onto the data frame created in the first R script. The column added is the volume of the birds limbs, calculated by the equation: 1/3 * pi * (limb width)^2 * limb length. This equation is used to find the volume of a cylinder, which is the closest shape to the shape of the birds limbs. 
+
+## Loading the revised measurements.csv
+
+```{r}
+data<-read.csv("~/Downloads/measurements.csv")
+```
+
+## Sorting the data by species, then by observer and then by limb volume
+
+```{r}
+Data<-data %>% 
+  arrange(Organism, Observer, Volume)
+
+head(Data)
+tail(Data)
+```
+#### Data sorted just by species
+
+```{r}
+Data_species<-data %>% 
+  arrange(Organism)
+
+head(Data_species)
+tail(Data_species)
+```
+
+#### Data sorted just by observer
+
+```{r}
+Data_observer<-data %>% 
+  arrange(Observer)
+
+head(Data_observer)
+tail(Data_observer)
+```
+
+#### Data sorted just by observer
+
+```{r}
+Data_volume<-data %>% 
+  arrange(Volume)
+
+head(Data_volume)
+tail(Data_volume)
+```
+
+## Creating a table which shows the average volume for each species
+
+```{r}
+Species_Avg_Volume<-Data %>% 
+  group_by(Organism) %>% 
+  summarise(
+    average_volume=mean(Volume, na.rm=TRUE)
+  )
+print(Species_Avg_Volume)
+```
+
+## Creating a table showing the number of observations for each combination of species and observer
+
+```{r}
+Species_and_Observers<-Data %>% 
+  group_by(Organism, Observer) %>% 
+  summarise(
+    number_of_observations=n()
+  )
+print(Species_and_Observers)
+```
+
+## Creating a single box plot to compare key features of the distributions of volumes for each species
+
+```{r}
+ggplot(Data, aes(x=Organism, y=Volume, fill=Organism)) + geom_boxplot() + labs(x="Species", y=bquote('Limb Volume'~(cm^3)), title="Comparison of Limb Volume Distributions by Species") + theme_minimal() + theme(axis.text.x = element_text(size=6.6))
+```
+
+## Creating a multi-panel plot showing frequency histograms of the limb volume distribution for each species
+
+```{r}
+ggplot(Data, aes(x=Volume, fill=Organism)) + geom_histogram(binwidth=15, colour="black", alpha=0.6) + facet_wrap(~Organism, scales="free_y") + labs(y="Frequency", x=bquote('Limb Volume'~(cm^3)), title="Limb Volume Distribution by Species") + theme_minimal() + theme(legend.position="none")
+```
+
+
